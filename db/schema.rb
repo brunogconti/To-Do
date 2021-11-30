@@ -14,7 +14,7 @@ ActiveRecord::Schema.define(version: 2021_11_30_191754) do
 
   create_table "records", force: :cascade do |t|
     t.string "event_type"
-    t.json "proporties"
+    t.json "properties"
     t.integer "task_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

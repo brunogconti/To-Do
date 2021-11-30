@@ -1,0 +1,38 @@
+<br>
+<hr>
+<table>
+    <tr>
+      <td class="border p-2">
+        <p>Task Name</p>
+      </td>
+      <td class="border p-2">
+        <p>Event Type</p>
+      </td>
+      <td class="border p-2">
+        <p>Message</p>
+      </td>
+      <td class="border p-2">
+        <p>Color</p>
+      </td>
+    </tr>
+  <% @records.each do |record| %>
+    <tr>
+      <td class="border p-2">
+        <p><%= record.task.name %></p>
+      </td>
+      <td class="border p-2">
+        <p><%= record.event_type %></p>
+      </td>
+      <td class="border p-2">
+        <p><%= record.properties["message"] %></p>
+      </td>
+      <td class="border p-2">
+        <p><%= record.properties["color"] %></p>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<hr>
+<%= link_to tasks_path do %>
+  <i class="fa fa-history"></i> Back to Tasks
+<% end %>
