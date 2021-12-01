@@ -1,12 +1,12 @@
 module ApplicationHelper
   def alert_class(flash_name)
-    if flash_name == '#7B68EE'
+    if flash_name == :one
       'class-one'
-    elsif flash_name == '#6A5ACD'
+    elsif flash_name == :two
       'class-two'
-    elsif flash_name == '#800000'
+    elsif flash_name == :three
       'class-three'
-    elsif flash_name == '#2F4F4F'
+    elsif flash_name == :four
       'class-four'
     end
   end

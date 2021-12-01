@@ -24,16 +24,17 @@ class TasksController < ApplicationController
   def update
     congrats = ['Muito bem!', 'Isso aí!', 'Boa!', 'Parabéns!', 'Ótimo'].sample
     shame = ['Poxa...', 'Que pena!', '🤦‍♂️', 'Má notícia', 'Isso é ruim'].sample
-    color = ['#7B68EE', '#6A5ACD', '#800000', '#2F4F4F'].sample
+    color_hash = {one: '#7B68EE', two: '#6A5ACD', three: '#800000', four: '#2F4F4F'}
+    color = color_hash.keys.sample
     set_task
     if params[:task][:completed] == '1'
-      Record.create(event_type: 'Congratulations', properties: { message: congrats, color: color }, task: @task)
+      Record.create(event_type: 'Congratulations', properties: { message: congrats, color: color_hash[color] }, task: @task)
       @task.update(task_params)
-      redirect_to task_path(@task), notice: "#{congrats}"
+      redirect_to task_path(@task), color: "#{congrats}"
     else
-      Record.create(event_type: 'Shame', properties: { message: shame, color: color }, task: @task)
+      Record.create(event_type: 'Shame', properties: { message: shame, color: color_hash[color] }, task: @task)
       @task.update(task_params)
-      redirect_to task_path(@task), notice: "#{shame}"
+      redirect_to task_path(@task), color: "#{shame}"
     end
   end
 

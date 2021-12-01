@@ -13,3 +13,26 @@
  *= require_tree .
  *= require_self
  */
+
+.class-one {
+  background-color: #7B68EE;
+}
+
+.class-two {
+  background-color: #6A5ACD;
+}
+
+.class-three {
+  background-color: #800000;
+}
+
+.class-four {
+  background-color: #2F4F4F;
+}
+
+.alert {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+}
