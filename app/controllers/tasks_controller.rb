@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show edit destroy]
+  before_action :set_task, only: %i[show edit update destroy]
+  before_action :set_congrats, :set_shame, :set_color, only: %i[update]
 
   def index
     @tasks = Task.all
@@ -22,19 +23,13 @@ class TasksController < ApplicationController
   end
 
   def update
-    congrats = ['Muito bem!', 'Isso aí!', 'Boa!', 'Parabéns!', 'Ótimo'].sample
-    shame = ['Poxa...', 'Que pena!', '🤦‍♂️', 'Má notícia', 'Isso é ruim'].sample
-    color_hash = {one: '#7B68EE', two: '#6A5ACD', three: '#800000', four: '#2F4F4F'}
-    color = color_hash.keys.sample
-    set_task
+    @task.update(task_params)
     if params[:task][:completed] == '1'
-      Record.create(event_type: 'Congratulations', properties: { message: congrats, color: color_hash[color] }, task: @task)
-      @task.update(task_params)
-      redirect_to task_path(@task), notice: "#{congrats}"
+      create_record('Congratulations', @congrats, @color, @task)
+      redirect_to task_path(@task), notice: "#{@congrats}"
     else
-      Record.create(event_type: 'Shame', properties: { message: shame, color: color_hash[color] }, task: @task)
-      @task.update(task_params)
-      redirect_to task_path(@task), alert: "#{shame}"
+      create_record('Shame', @shame, @color, @task)
+      redirect_to task_path(@task), alert: "#{@shame}"
     end
   end
 
@@ -45,8 +40,25 @@ class TasksController < ApplicationController
 
   private
 
+  def create_record(event_type, message, color, task)
+    record = Record.new(event_type: event_type, properties: { message: message, color: color }, task: task)
+    record.save
+  end
+
   def set_task
     @task = Task.find(params[:id])
+  end
+
+  def set_congrats
+    @congrats = ['Muito bem!', 'Isso aí!', 'Boa!', 'Parabéns!', 'Ótimo'].sample
+  end
+
+  def set_shame
+    @shame = ['Poxa...', 'Que pena!', '🤦‍♂️', 'Má notícia', 'Isso é ruim'].sample
+  end
+
+  def set_color
+    @color = ['#7B68EE', '#6A5ACD', '#800000', '#2F4F4F'].sample
   end
 
   def task_params
