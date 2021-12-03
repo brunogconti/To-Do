@@ -45,10 +45,6 @@ class TasksController < ApplicationController
     record.save
   end
 
-  def set_task
-    @task = Task.find(params[:id])
-  end
-
   def set_congrats
     @congrats = ['Muito bem!', 'Isso aí!', 'Boa!', 'Parabéns!', 'Ótimo'].sample
   end
@@ -59,6 +55,10 @@ class TasksController < ApplicationController
 
   def set_color
     @color = ['#7B68EE', '#6A5ACD', '#800000', '#2F4F4F'].sample
+  end
+
+  def set_task
+    @task = Task.find(params[:id])
   end
 
   def task_params
