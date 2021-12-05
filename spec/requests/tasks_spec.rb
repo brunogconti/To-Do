@@ -8,6 +8,7 @@ RSpec.describe 'Tasks', type: :request do
       task.reload
       expect(Record.count).to eq(0)
       expect(task.name).to eq('Teste Update')
+      expect(task.completed).to eq(false)
       expect(response).to redirect_to(task_url(task))
     end
 
@@ -16,9 +17,9 @@ RSpec.describe 'Tasks', type: :request do
       patch task_url(task), params: { task: { name: 'Teste Update', completed: '1' } }
       task.reload
       expect(Record.count).to eq(1)
-      record = Record.find(1)
-      expect(record.event_type).to eq('Congratulations')
+      expect(Record.find(1).event_type).to eq('Congratulations')
       expect(task.name).to eq('Teste Update')
+      expect(task.completed).to eq(true)
       expect(response).to redirect_to(task_url(task))
     end
 
@@ -27,9 +28,9 @@ RSpec.describe 'Tasks', type: :request do
       patch task_url(task), params: { task: { name: 'Teste Update', completed: '0' } }
       task.reload
       expect(Record.count).to eq(1)
-      record = Record.find(1)
-      expect(record.event_type).to eq('Shame')
+      expect(Record.find(1).event_type).to eq('Shame')
       expect(task.name).to eq('Teste Update')
+      expect(task.completed).to eq(false)
       expect(response).to redirect_to(task_url(task))
     end
   end
