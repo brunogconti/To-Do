@@ -24,7 +24,7 @@ class TasksController < ApplicationController
     case @completed
     when @task.completed
       @task.update(task_params)
-      redirect_to task_path(@task), notice: 'Tarefa atualizada com sucesso'
+      redirect_to task_path(@task), notice: 'Nome atualizado'
     when true
       @task.update(task_params)
       set_color
