@@ -20,23 +20,15 @@ class TasksController < ApplicationController
   def edit; end
 
   def update
-    set_completed
-    case @completed
-    when @task.completed
+    @completed = params[:task][:completed] == '1'
+    if @completed == @task.completed
       @task.update(task_params)
       redirect_to task_path(@task), notice: 'Nome atualizado'
-    when true
+    else
       @task.update(task_params)
-      set_color
-      set_congrats
-      create_record('Congratulations', @congrats, @color, @task)
-      redirect_to task_path(@task), notice: @congrats.to_s
-    when false
-      @task.update(task_params)
-      set_color
-      set_shame
-      create_record('Shame', @shame, @color, @task)
-      redirect_to task_path(@task), alert: @shame.to_s
+      message = RecordCreator.new(event_type: @completed == true ? 'Congratulations' : 'Shame',
+                                  task: @task).create_record
+      redirect_to task_path(@task), notice: message
     end
   end
 
@@ -53,39 +45,5 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:name, :completed)
-  end
-
-  def set_completed
-    @completed = params[:task][:completed] == '1'
-  end
-
-  def set_color
-    @color = ['#7B68EE', '#6A5ACD', '#800000', '#2F4F4F'].sample
-  end
-
-  def set_congrats
-    @congrats = case @task.updated_at.strftime('%A')
-                when 'Monday'
-                  'Muito bem!'
-                when 'Tuesday'
-                  'Isso aí!'
-                when 'Wednesday'
-                  'Boa!'
-                when 'Thursday'
-                  'Parabéns!'
-                when 'Friday'
-                  'Parabéns!'
-                else
-                  'Que coisa boa!'
-                end
-  end
-
-  def set_shame
-    @shame = ['Poxa...', 'Que pena!', '🤦‍♂️', 'Má notícia', 'Isso é ruim'].sample
-  end
-
-  def create_record(event_type, message, color, task)
-    record = Record.new(event_type: event_type, properties: { message: message, color: color }, task: task)
-    record.save
   end
 end
